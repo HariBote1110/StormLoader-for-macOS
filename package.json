@@ -4,10 +4,12 @@
   "description": "A mod manager for Stormworks on macOS.",
   "main": "src/main/app.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-builder"
   },
   "devDependencies": {
-    "electron": "^29.1.5"
+    "electron": "^29.1.5",
+    "electron-builder": "^24.13.3"
   },
   "dependencies": {
     "adm-zip": "^0.5.10",
