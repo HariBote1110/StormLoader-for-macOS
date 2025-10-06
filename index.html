@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>StormLoader for macOS</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';">
+    <style>
+        :root {
+            --bg-color: #282c34; --bg-light: #3a4049; --text-color: #abb2bf;
+            --border-color: #4f5663; --primary-color: #61afef; --text-dark: #282c34;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; display: flex; flex-direction: column; height: 100vh; }
+        .container { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; }
+        h1, h2 { margin-top: 0; }
+        h1 { font-size: 24px; }
+        h2 { font-size: 18px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 15px; }
+        button { background-color: var(--bg-light); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 5px; font-size: 14px; padding: 8px 15px; cursor: pointer; transition: background-color 0.2s; }
+        button:hover { background-color: #4b5260; }
+        button.primary { background-color: var(--primary-color); color: var(--text-dark); }
+        .card { background-color: var(--bg-light); border-radius: 8px; padding: 15px; margin-bottom: 20px; border: 1px solid var(--border-color); }
+        #game-dir-display { font-size: 12px; color: var(--text-color); background: var(--bg-color); padding: 8px; border-radius: 4px; display: inline-block; margin-left: 10px; }
+        #mod-list-container { flex-grow: 1; overflow-y: auto; }
+        #mod-list { list-style: none; padding: 0; margin: 0; }
+        #mod-list li { background-color: var(--bg-color); padding: 12px 15px; border: 1px solid var(--border-color); border-radius: 5px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        #mod-list small { color: #828a99; }
+        .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #4f5663; transition: .4s; border-radius: 28px; }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary-color); }
+        input:checked + .slider:before { transform: translateX(22px); }
+        #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(40,44,52,0.8); color: white; display: none; justify-content: center; align-items: center; z-index: 1000; }
+    </style>
+</head>
+<body>
+    <div id="loading-overlay"><p id="loading-message"></p></div>
+    <div class="container">
+        <h1 data-lang="APP_TITLE">StormLoader for macOS</h1>
+        <div class="settings card">
+            <h2 data-lang="SETTINGS">Settings</h2>
+            <button id="set-game-dir-btn" data-lang="SET_GAME_DIR">Select Stormworks.app</button>
+            <button id="backup-rom-btn" data-lang="UPDATE_VANILLA_ROM">Update Vanilla ROM Backup</button>
+            <p style="margin-top: 15px;"><span data-lang="GAME_ROM_DIR">Game ROM Directory:</span> <code id="game-dir-display" data-lang-default="NOT_SET">Not set</code></p>
+        </div>
+        <div class="controls card">
+            <h2 data-lang="CONTROLS">Controls</h2>
+            <button id="add-mod-btn" class="primary" data-lang="ADD_MOD">Add Mod (.slp)</button>
+        </div>
+        <div class="card" style="flex-grow: 1; display: flex; flex-direction: column; overflow: hidden;">
+            <h2 data-lang="INSTALLED_MODS">Installed Mods</h2>
+            <div id="mod-list-container">
+                <ul id="mod-list"></ul>
+            </div>
+        </div>
+    </div>
+    <script src="./renderer.js"></script>
+</body>
+</html>

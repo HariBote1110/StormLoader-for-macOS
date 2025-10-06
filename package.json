@@ -1,0 +1,17 @@
+{
+  "name": "stormloader-for-macos",
+  "version": "0.1.0",
+  "description": "A mod manager for Stormworks on macOS.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^29.1.5"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.10",
+    "fs-extra": "^11.2.0",
+    "xml2js": "^0.6.2"
+  }
+}
