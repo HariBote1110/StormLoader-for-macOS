@@ -27,7 +27,7 @@ GitHubリポジトリの **[Releases](https://www.google.com/search?q=https://gi
 
 ## クレジット
 
-このアプリケーションは、[lewinator56氏が開発したオリジナルのWindows版StormLoader](https://www.google.com/search?q=https://github.com/lewinator56/stormloader)に強くインスパイアされています。素晴らしい元祖ツールに感謝します。
+このアプリケーションは、[lewinator56氏が開発したオリジナルのWindows版StormLoader](https://github.com/Lewinator56/StormLoader)に強くインスパイアされています。素晴らしい元祖ツールに感謝します。
 
 ## ライセンス
 
