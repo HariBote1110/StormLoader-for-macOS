@@ -31,6 +31,8 @@
   "DELETE_PLAYLIST": "Delete",
   "RENAME_PROMPT": "Enter the new playlist name:",
   "DELETE_CONFIRM": "Are you sure you want to delete '{playlistName}'? This action cannot be undone.",
+  "DELETE_MOD_CONFIRM": "Are you sure you want to delete '{modName}'? This action cannot be undone.",
+  "MOD_DELETE_SUCCESS": "Mod '{modName}' has been deleted successfully.",
   "PLAYLIST_RENAME_SUCCESS": "Playlist renamed successfully.",
   "PLAYLIST_DELETE_SUCCESS": "Playlist deleted successfully.",
   "OVERWRITE_PLAYLIST": "Overwrite Selected Playlist",
@@ -39,7 +41,6 @@
   "SELECT_GAME_FOLDER": "Select Stormworks Install Folder",
   "APPLY_CHANGES": "Apply Changes",
   "CHANGES_PENDING": "Changes pending",
-  "LAUNCH_GAME": "Launch Stormworks",
   "APPLYING_CHANGES": "Applying changes...",
   "CLICK_TO_SHOW_PATH": "[Click to show path]"
 }

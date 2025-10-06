@@ -129,19 +129,6 @@ export function setupEventListeners(translations) {
         window.electronAPI.setLastSelectedPlaylist(elements.playlistSelect.value);
     });
 
-    elements.launchGameBtn.addEventListener('click', async () => {
-        if (window.hasPendingChanges) {
-            const confirmMessage = translations.LAUNCH_CONFIRM || "You have unsaved changes. Launch game without applying them?";
-            if (!confirm(confirmMessage)) {
-                return;
-            }
-        }
-        const result = await window.electronAPI.launchGame();
-        if (!result.success) {
-            alert(`${translations.ERROR}: ${result.message}`);
-        }
-    });
-
     elements.applyChangesBtn.addEventListener('click', async () => {
         const activeStates = {};
         document.querySelectorAll('#mod-list li').forEach(li => {
@@ -155,6 +142,24 @@ export function setupEventListeners(translations) {
             updatePendingState(false);
         } else {
             alert(`${translations.ERROR}: ${result.message}`);
+        }
+    });
+    
+    elements.modList.addEventListener('click', async (event) => {
+        if (event.target.classList.contains('delete-mod-btn')) {
+            const li = event.target.closest('li');
+            const modName = li.dataset.modName;
+            
+            const confirmMessage = (translations.DELETE_MOD_CONFIRM || "Are you sure you want to delete '{modName}'? This action cannot be undone.").replace('{modName}', modName);
+            if (confirm(confirmMessage)) {
+                const result = await window.electronAPI.deleteMod(modName);
+                if (result.success) {
+                    li.remove();
+                    alert(result.message);
+                } else {
+                    alert(`${translations.ERROR}: ${result.message}`);
+                }
+            }
         }
     });
 

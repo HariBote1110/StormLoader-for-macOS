@@ -15,7 +15,6 @@ export const elements = {
     renamePlaylistBtn: document.getElementById('rename-playlist-btn'),
     deletePlaylistBtn: document.getElementById('delete-playlist-btn'),
     overwritePlaylistBtn: document.getElementById('overwrite-playlist-btn'),
-    launchGameBtn: document.getElementById('launch-game-btn'),
     applyChangesBtn: document.getElementById('apply-changes-btn'),
     pendingIndicator: document.getElementById('pending-indicator'),
 };
@@ -43,8 +42,15 @@ export function addModToList(mod, translations) {
     const li = document.createElement('li');
     li.dataset.modName = mod.name;
     const modDetails = `<div><strong>${mod.name}</strong><br><small>${translations.AUTHOR}: ${mod.author} | ${translations.VERSION}: ${mod.version}</small></div>`;
-    const toggleSwitch = `<label class="switch"><input type="checkbox" ${mod.active ? 'checked' : ''}><span class="slider"></span></label>`;
-    li.innerHTML = modDetails + toggleSwitch;
+    
+    const controls = `
+        <div class="mod-controls">
+            <label class="switch"><input type="checkbox" ${mod.active ? 'checked' : ''}><span class="slider"></span></label>
+            <button class="delete-mod-btn danger">🗑️</button>
+        </div>
+    `;
+
+    li.innerHTML = modDetails + controls;
 
     const checkbox = li.querySelector('input[type="checkbox"]');
     checkbox.addEventListener('change', () => {

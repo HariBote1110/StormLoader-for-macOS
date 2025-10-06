@@ -31,6 +31,8 @@
   "DELETE_PLAYLIST": "削除",
   "RENAME_PROMPT": "新しいプレイリスト名を入力してください:",
   "DELETE_CONFIRM": "'{playlistName}' を本当に削除しますか？この操作は元に戻せません。",
+  "DELETE_MOD_CONFIRM": "'{modName}'を本当に削除しますか？この操作は元に戻せません。",
+  "MOD_DELETE_SUCCESS": "MOD '{modName}' は正常に削除されました。",
   "PLAYLIST_RENAME_SUCCESS": "プレイリストの名前が変更されました。",
   "PLAYLIST_DELETE_SUCCESS": "プレイリストが削除されました。",
   "OVERWRITE_PLAYLIST": "選択中のプレイリストを上書き",
@@ -39,7 +41,6 @@
   "SELECT_GAME_FOLDER": "Stormworksのインストールフォルダを選択",
   "APPLY_CHANGES": "変更を適用",
   "CHANGES_PENDING": "未適用の変更があります",
-  "LAUNCH_GAME": "Stormworksを起動",
   "APPLYING_CHANGES": "変更を適用中...",
   "CLICK_TO_SHOW_PATH": "[クリックしてパスを表示]"
 }

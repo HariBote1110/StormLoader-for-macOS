@@ -97,6 +97,39 @@ function registerIpcHandlers(mainWindow, translations) {
     }
   });
 
+  ipcMain.handle('delete-mod', async (event, modName) => {
+    if (!modName) return { success: false, message: 'Invalid mod name provided.' };
+  
+    const store = readStore();
+    if (!store.mods) {
+      return { success: false, message: 'No mods found in store.' };
+    }
+  
+    const modToDelete = store.mods.find(m => m.name === modName);
+    if (!modToDelete) {
+      return { success: false, message: `Mod '${modName}' not found.` };
+    }
+  
+    try {
+      // Delete mod files from the management directory
+      const modPath = modToDelete.path;
+      if (await fs.pathExists(modPath)) {
+        await fs.remove(modPath);
+        console.log(`Deleted mod files from: ${modPath}`);
+      }
+  
+      // Remove mod info from store.json
+      store.mods = store.mods.filter(m => m.name !== modName);
+      writeStore(store);
+      
+      const message = (translations.MOD_DELETE_SUCCESS || "Mod '{modName}' has been deleted successfully.").replace('{modName}', modName);
+      return { success: true, message: message };
+    } catch (error) {
+      console.error(`Failed to delete mod '${modName}':`, error);
+      return { success: false, message: error.message };
+    }
+  });
+
   ipcMain.handle('save-playlist', async (event, name, activeStates) => {
     if (!name) return { success: false, message: 'Playlist name cannot be empty.' };
     const store = readStore();
@@ -171,20 +204,6 @@ function registerIpcHandlers(mainWindow, translations) {
     store.selectedPlaylist = name;
     writeStore(store);
     return { success: true };
-  });
-
-  ipcMain.handle('launch-game', async () => {
-    const store = readStore();
-    if (store.gameDirectory && await fs.pathExists(store.gameDirectory)) {
-        try {
-            await shell.openPath(store.gameDirectory);
-            return { success: true };
-        } catch (error) {
-            console.error('Failed to launch game:', error);
-            return { success: false, message: error.message };
-        }
-    }
-    return { success: false, message: 'Game directory not set.' };
   });
 
   ipcMain.handle('apply-mod-changes', async (event, activeStates) => {
