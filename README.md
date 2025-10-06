@@ -23,7 +23,7 @@ StormLoader for macOSは、これまでMODの導入が難しかったMac版Storm
 
 ## インストール
 
-GitHubリポジトリの **[Releases](https://github.com/HariBote1110/StormLoader-for-macOS/releases/tag/release)** ページから、最新バージョンの`.dmg`ファイルをダウンロードしてインストールしてください。
+GitHubリポジトリの **[Releases](https://github.com/HariBote1110/StormLoader-for-macOS/releases)** ページから、最新バージョンの`.dmg`ファイルをダウンロードしてインストールしてください。
 
 ## クレジット
 
