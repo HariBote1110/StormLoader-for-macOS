@@ -1,5 +1,5 @@
-# macOSユーザー向けのStormworks MODマネージャーです。
-
+# macOSユーザー向けのStormworks MODマネージャー
+![GitHub All Releases](https://img.shields.io/github/downloads/haribote1110/StormLoader-for-macOS/total)
 ## 概要
 
 StormLoader for macOSは、これまでMODの導入が難しかったMac版Stormworksプレイヤーのために開発された、シンプルで使いやすいMOD管理ツールです。オリジナルのWindows版 `StormLoader` の便利な機能を取り入れつつ、macOS向けに再設計されました。
