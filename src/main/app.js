@@ -2,14 +2,13 @@ const { app, BrowserWindow, Menu, shell, ipcMain } = require('electron');
 const path = require('path');
 const { registerIpcHandlers } = require('./ipcHandlers');
 const { readStore, writeStore } = require('./store');
-const { autoUpdater } = require("electron-updater"); // autoUpdaterを追加
 
 let mainWindow;
 let translations;
 
 // 言語ファイルの読み込み関数
 const loadTranslations = (lang) => {
-  const langPath = path.join(__dirname, `../../locales/${lang}.json`);
+  const langPath = path.join(app.getAppPath(), `locales/${lang}.json`);
   return require(langPath);
 };
 
@@ -33,14 +32,14 @@ app.on('ready', async () => {
     minWidth: 900,
     minHeight: 600,
     webPreferences: {
-      preload: path.join(__dirname, '../preload.js'),
+      preload: path.join(app.getAppPath(), 'preload.js'), // ★★★ 修正箇所 ★★★
       nodeIntegration: false,
       contextIsolation: true
     },
-    icon: path.join(__dirname, '../../build/icon.png') // アプリケーションアイコンを設定
+    icon: path.join(app.getAppPath(), 'build/icon.png') // アプリケーションアイコンを設定
   });
 
-  mainWindow.loadFile(path.join(__dirname, '../../index.html'));
+  mainWindow.loadFile(path.join(app.getAppPath(), 'index.html'));
 
   // アプリケーションが開発モードの場合のみDevToolsを開く
   if (process.env.NODE_ENV === 'development') {
@@ -49,8 +48,6 @@ app.on('ready', async () => {
 
   registerIpcHandlers(mainWindow, translations);
   createAppMenu();
-
-  // autoUpdater.checkForUpdatesAndNotify(); // アプリ起動時に自動更新チェック
 });
 
 app.on('window-all-closed', () => {
