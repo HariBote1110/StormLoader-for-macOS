@@ -1,10 +1,10 @@
 {
   "name": "stormloader-for-macos",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A mod manager for Stormworks on macOS.",
   "main": "src/main/app.js",
   "scripts": {
-    "start": "electron .",
+    "start": "NODE_ENV=development electron .",
     "build": "electron-builder"
   },
   "devDependencies": {
@@ -15,5 +15,39 @@
     "adm-zip": "^0.5.10",
     "fs-extra": "^11.2.0",
     "xml2js": "^0.6.2"
+  },
+  "build": {
+    "appId": "com.yourcompany.stormloader-for-macos",
+    "productName": "StormLoader for macOS",
+    "copyright": "Copyright © 2025 HariBote1110",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!build/icon.*"
+    ],
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "icon": "build/icon.png"
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    }
   }
 }
