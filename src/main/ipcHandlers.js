@@ -33,7 +33,7 @@ function registerIpcHandlers(mainWindow, translations) {
           return { success: false };
       }
       romPath = path.join(appPath, 'Contents', 'Resources', 'rom');
-    } else {
+    } else { // Windows or other platforms
       const { canceled, filePaths } = await dialog.showOpenDialog({
         title: translations.SELECT_GAME_FOLDER,
         properties: ['openDirectory']

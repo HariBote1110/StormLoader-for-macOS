@@ -7,9 +7,10 @@ const vanillaRomBackupPath = path.join(app.getPath('userData'), 'vanilla_rom_bac
 
 function getRomPath(gameDirectory) {
     if (!gameDirectory) return null;
-    if (process.platform === 'darwin') {
+    if (process.platform === 'darwin') { // macOS
         return path.join(gameDirectory, 'Contents', 'Resources', 'rom');
     }
+    // Windows and other platforms
     return path.join(gameDirectory, 'rom');
 }
 
