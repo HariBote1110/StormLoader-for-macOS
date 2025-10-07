@@ -54,11 +54,21 @@ function registerIpcHandlers(translations) {
 
     const store = readStore();
     store.gameDirectory = appPath;
+    console.log(`[IPC Handler] Saving gameDirectory to store: ${store.gameDirectory}`);
     writeStore(store);
 
     await backupRom(window, translations);
 
     return { success: true, path: romPath };
+  });
+
+  ipcMain.handle('switch-language', (event, locale) => {
+    const store = readStore();
+    if (!store.settings) store.settings = {};
+    store.settings.language = locale;
+    writeStore(store);
+    app.relaunch();
+    app.quit();
   });
 
   ipcMain.handle('add-mod', async () => {
@@ -210,14 +220,7 @@ function registerIpcHandlers(translations) {
     writeStore(store);
     return { success: true };
   });
-  ipcMain.handle('switch-language', (event, locale) => {
-    const store = readStore();
-    if (!store.settings) store.settings = {};
-    store.settings.language = locale;
-    writeStore(store);
-    app.relaunch();
-    app.quit();
-  });
+
   ipcMain.handle('apply-mod-changes', async (event, activeStates) => {
     const window = BrowserWindow.fromWebContents(event.sender);
     try {
