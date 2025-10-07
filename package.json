@@ -1,6 +1,6 @@
 {
   "name": "stormloader-for-macos",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "A mod manager for Stormworks on macOS.",
   "main": "src/main/app.js",
   "scripts": {
@@ -35,6 +35,10 @@
         "zip"
       ],
       "icon": "build/icon.png"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
     },
     "dmg": {
       "contents": [
