@@ -1,4 +1,4 @@
-const { app, ipcMain, dialog, shell } = require('electron');
+const { app, ipcMain, dialog, shell, BrowserWindow } = require('electron');
 const path = require('path');
 const fs = require('fs-extra');
 const AdmZip = require('adm-zip');
@@ -6,7 +6,7 @@ const { parseStringPromise } = require('xml2js');
 const { readStore, writeStore } = require('./store');
 const { rebuildRomFromActiveMods, backupRom, getRomPath } = require('./modService');
 
-function registerIpcHandlers(mainWindow, translations) {
+function registerIpcHandlers(translations) {
   ipcMain.handle('get-initial-data', async () => {
     const store = readStore();
     if (store.gameDirectory) {
@@ -15,11 +15,15 @@ function registerIpcHandlers(mainWindow, translations) {
     return { store, translations };
   });
 
-  ipcMain.handle('backup-rom', () => backupRom(mainWindow, translations));
+  ipcMain.handle('backup-rom', (event) => {
+    const window = BrowserWindow.fromWebContents(event.sender);
+    return backupRom(window, translations);
+  });
   
-  ipcMain.handle('set-game-directory', async () => {
+  ipcMain.handle('set-game-directory', async (event) => {
     let romPath;
     let appPath;
+    const window = BrowserWindow.fromWebContents(event.sender);
 
     if (process.platform === 'darwin') {
       const { canceled, filePaths } = await dialog.showOpenDialog({
@@ -52,7 +56,7 @@ function registerIpcHandlers(mainWindow, translations) {
     store.gameDirectory = appPath;
     writeStore(store);
 
-    await backupRom(mainWindow, translations);
+    await backupRom(window, translations);
 
     return { success: true, path: romPath };
   });
@@ -140,6 +144,7 @@ function registerIpcHandlers(mainWindow, translations) {
   });
 
   ipcMain.handle('load-playlist', async (event, name) => {
+    const window = BrowserWindow.fromWebContents(event.sender);
     try {
         const store = readStore();
         const playlist = store.playlists[name];
@@ -150,7 +155,7 @@ function registerIpcHandlers(mainWindow, translations) {
         });
         writeStore(store);
 
-        await rebuildRomFromActiveMods(mainWindow, translations);
+        await rebuildRomFromActiveMods(window, translations);
 
         const updatedStore = readStore();
         return { success: true, mods: updatedStore.mods, message: translations.PLAYLIST_LOAD_SUCCESS };
@@ -158,7 +163,7 @@ function registerIpcHandlers(mainWindow, translations) {
         console.error('Failed to load playlist:', error);
         return { success: false, message: error.message };
     } finally {
-        mainWindow.webContents.send('hide-loading');
+        if(window && !window.isDestroyed()) window.webContents.send('hide-loading');
     }
   });
 
@@ -205,8 +210,16 @@ function registerIpcHandlers(mainWindow, translations) {
     writeStore(store);
     return { success: true };
   });
-
+  ipcMain.handle('switch-language', (event, locale) => {
+    const store = readStore();
+    if (!store.settings) store.settings = {};
+    store.settings.language = locale;
+    writeStore(store);
+    app.relaunch();
+    app.quit();
+  });
   ipcMain.handle('apply-mod-changes', async (event, activeStates) => {
+    const window = BrowserWindow.fromWebContents(event.sender);
     try {
         const store = readStore();
         if (!store.mods) return { success: false, message: 'No mods found.' };
@@ -216,7 +229,7 @@ function registerIpcHandlers(mainWindow, translations) {
         });
         writeStore(store);
 
-        await rebuildRomFromActiveMods(mainWindow, translations);
+        await rebuildRomFromActiveMods(window, translations);
         
         return { success: true };
 
@@ -224,7 +237,7 @@ function registerIpcHandlers(mainWindow, translations) {
         console.error('Failed to apply changes:', error);
         return { success: false, message: error.message };
     } finally {
-        mainWindow.webContents.send('hide-loading');
+        if(window && !window.isDestroyed()) window.webContents.send('hide-loading');
     }
   });
 }

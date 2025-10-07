@@ -42,5 +42,6 @@
   "APPLY_CHANGES": "Apply Changes",
   "CHANGES_PENDING": "Changes pending",
   "APPLYING_CHANGES": "Applying changes...",
-  "CLICK_TO_SHOW_PATH": "[Click to show path]"
+  "CLICK_TO_SHOW_PATH": "[Click to show path]",
+  "SWITCH_LANGUAGE_CONFIRM": "Switch language? The application will restart."
 }

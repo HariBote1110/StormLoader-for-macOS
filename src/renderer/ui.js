@@ -1,5 +1,6 @@
 // DOM要素の取得
 export const elements = {
+    settingsBtn: document.getElementById('settings-btn'),
     addModBtn: document.getElementById('add-mod-btn'),
     setGameDirBtn: document.getElementById('set-game-dir-btn'),
     backupRomBtn: document.getElementById('backup-rom-btn'),
@@ -46,7 +47,7 @@ export function addModToList(mod, translations) {
     const controls = `
         <div class="mod-controls">
             <label class="switch"><input type="checkbox" ${mod.active ? 'checked' : ''}><span class="slider"></span></label>
-            <button class="delete-mod-btn danger">🗑️</button>
+            <button class="delete-mod-btn danger"><img src="assets/icons/trash.svg" alt="Delete"></button>
         </div>
     `;
 

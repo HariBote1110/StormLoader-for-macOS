@@ -20,7 +20,10 @@
             <button id="apply-changes-btn" class="primary" data-lang="APPLY_CHANGES" style="margin-top: 15px; display: none;">Apply Changes</button>
         </div>
         <div class="main-content">
-            <h1 data-lang="APP_TITLE">StormLoader for macOS</h1>
+            <div class="title-bar">
+                <h1 data-lang="APP_TITLE">StormLoader for macOS</h1>
+                <button id="settings-btn" class="icon-btn"><img src="assets/icons/settings.svg" alt="Settings"></button>
+            </div>
             <div class="card">
                 <h2 data-lang="SETTINGS">Settings</h2>
                 <button id="set-game-dir-btn" data-lang="SET_GAME_DIR">Select Stormworks.app</button>
@@ -30,7 +33,7 @@
                     <div id="game-dir-container" class="path-container">
                         <span class="placeholder-text" data-lang="CLICK_TO_SHOW_PATH">[Click to show path]</span>
                         <code id="game-dir-display" data-lang-default="NOT_SET">Not set</code>
-                        <span class="eye-icon">👁️</span>
+                        <span class="eye-icon"><img src="assets/icons/eye.svg" alt="Toggle visibility"></span>
                     </div>
                 </p>
             </div>

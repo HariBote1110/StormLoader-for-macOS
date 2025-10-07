@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, shell, ipcMain } = require('electron');
+const { app, BrowserWindow, Menu, shell } = require('electron');
 const path = require('path');
 const fs = require('fs-extra');
 const { registerIpcHandlers } = require('./ipcHandlers');
@@ -65,13 +65,6 @@ function createAppMenu() {
         ]
       },
       {
-        label: translations.MENU_LANGUAGE || 'Language',
-        submenu: [
-            createLanguageMenuItem('en', 'English'),
-            createLanguageMenuItem('ja', '日本語')
-        ]
-      },
-      {
         label: '表示',
         submenu: [
           { role: 'reload', label: '再読み込み' },
@@ -111,17 +104,7 @@ function createAppMenu() {
     Menu.setApplicationMenu(menu);
 }
 
-
 async function createWindow () {
-  const store = readStore();
-  let currentLang = store.settings?.language || 'ja';
-  translations = await loadTranslations(currentLang);
-
-  if (!store.settings) {
-    store.settings = { language: 'ja' };
-    writeStore(store);
-  }
-
   mainWindow = new BrowserWindow({
     width: 1000,
     height: 700,
@@ -137,15 +120,29 @@ async function createWindow () {
 
   mainWindow.loadFile(path.join(app.getAppPath(), 'index.html'));
 
+  mainWindow.on('closed', () => {
+    mainWindow = null;
+  });
+
   if (process.env.NODE_ENV === 'development') {
     mainWindow.webContents.openDevTools();
   }
-
-  registerIpcHandlers(mainWindow, translations);
-  createAppMenu();
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(async () => {
+  const store = readStore();
+  let currentLang = store.settings?.language || 'ja';
+  translations = await loadTranslations(currentLang);
+
+  if (!store.settings) {
+    store.settings = { language: 'ja' };
+    writeStore(store);
+  }
+
+  registerIpcHandlers(translations);
+  createAppMenu();
+  createWindow();
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

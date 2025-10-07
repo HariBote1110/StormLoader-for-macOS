@@ -2,6 +2,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
   getInitialData: () => ipcRenderer.invoke('get-initial-data'),
+  switchLanguage: (locale) => ipcRenderer.invoke('switch-language', locale),
   setGameDirectory: () => ipcRenderer.invoke('set-game-directory'),
   addMod: () => ipcRenderer.invoke('add-mod'),
   deleteMod: (modName) => ipcRenderer.invoke('delete-mod', modName),

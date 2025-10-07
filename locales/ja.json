@@ -42,5 +42,6 @@
   "APPLY_CHANGES": "変更を適用",
   "CHANGES_PENDING": "未適用の変更があります",
   "APPLYING_CHANGES": "変更を適用中...",
-  "CLICK_TO_SHOW_PATH": "[クリックしてパスを表示]"
+  "CLICK_TO_SHOW_PATH": "[クリックしてパスを表示]",
+  "SWITCH_LANGUAGE_CONFIRM": "言語を切り替えますか？アプリケーションが再起動されます。"
 }

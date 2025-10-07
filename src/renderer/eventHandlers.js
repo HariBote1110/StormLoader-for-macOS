@@ -1,6 +1,14 @@
 import { elements, refreshModListUI, refreshPlaylistUI, updatePendingState, addModToList } from './ui.js';
 
 export function setupEventListeners(translations) {
+    elements.settingsBtn.addEventListener('click', async () => {
+        if (confirm(translations.SWITCH_LANGUAGE_CONFIRM)) {
+            const currentLocale = (await window.electronAPI.getInitialData()).store.settings?.language || 'ja';
+            const newLocale = currentLocale === 'ja' ? 'en' : 'ja';
+            await window.electronAPI.switchLanguage(newLocale);
+        }
+    });
+
     elements.addModBtn.addEventListener('click', async () => {
         const result = await window.electronAPI.addMod();
         if (result.success) {
@@ -146,7 +154,7 @@ export function setupEventListeners(translations) {
     });
     
     elements.modList.addEventListener('click', async (event) => {
-        if (event.target.classList.contains('delete-mod-btn')) {
+        if (event.target.closest('.delete-mod-btn')) {
             const li = event.target.closest('li');
             const modName = li.dataset.modName;
             
@@ -165,7 +173,14 @@ export function setupEventListeners(translations) {
 
     elements.gameDirContainer.addEventListener('click', () => {
         if (elements.gameDirDisplay.textContent !== (translations.NOT_SET || 'Not set')) {
-            elements.gameDirContainer.classList.toggle('path-hidden');
+            const container = elements.gameDirContainer;
+            container.classList.toggle('path-hidden');
+            const eyeIcon = container.querySelector('.eye-icon img');
+            if (container.classList.contains('path-hidden')) {
+                eyeIcon.src = 'assets/icons/eye.svg';
+            } else {
+                eyeIcon.src = 'assets/icons/eye-off.svg';
+            }
         }
     });
 
