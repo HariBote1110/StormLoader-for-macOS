@@ -38,12 +38,14 @@
       ],
       "icon": "build/icon.png"
     },
-    "win": {
+  "win": {
+    "target": {      
       "target": "nsis",
-      "icon": "build/icon.ico",
-      "compression": "store",
-      "arch": "x64"
-    },
+      "arch": [      
+        "x64"
+      ]
+    }
+  },
     "dmg": {
       "contents": [
         {
