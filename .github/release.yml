@@ -1,0 +1,54 @@
+name: Build and Release
+
+# このワークフローが実行されるタイミングを指定
+on:
+  release:
+    types: [published] # 新しいリリースが公開された時に実行
+
+jobs:
+  build:
+    # macOSとWindowsの両方でビルドを実行
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
+
+    steps:
+      # 1. リポジトリのコードをチェックアウト
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Node.js環境をセットアップ
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # package.jsonで指定しているNode.jsのバージョンに合わせてください
+
+      # 3. 依存関係をインストール
+      - name: Install dependencies
+        run: npm install
+
+      # 4. アプリケーションをビルド
+      #    GH_TOKENはelectron-builderがリリースにアップロードするために必要です
+      - name: Build application
+        run: npm run build
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 5. ビルド成果物をアップロード
+      #    ビルドされたファイルをリリースページに添付します
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: |
+            dist/*.dmg
+            dist/*.zip
+            dist/latest-mac.yml
+            dist/builder-debug.yml
+            dist/builder-effective-config.yaml
+            dist/StormForge-*.exe
+          asset_content_type: application/octet-stream
