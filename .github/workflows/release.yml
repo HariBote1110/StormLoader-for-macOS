@@ -28,6 +28,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # 【デバッグ用ステップ】dist ディレクトリの中身をリスト表示する
+      - name: List files in the dist directory
+        run: |
+          echo "Listing files in the dist directory for ${{ runner.os }}..."
+          ls -R dist
+
       # macOS用のビルド成果物をアップロード
       - name: Upload macOS Release Assets
         if: runner.os == 'macOS'
