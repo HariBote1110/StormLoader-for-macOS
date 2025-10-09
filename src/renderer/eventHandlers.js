@@ -184,6 +184,96 @@ export function setupEventListeners(translations) {
         }
     });
 
+    // Share/Import Event Listeners
+    elements.shareConfigBtn.addEventListener('click', async () => {
+        const activeMods = [];
+        const { store } = await window.electronAPI.getInitialData();
+        const allMods = store.mods || [];
+
+        document.querySelectorAll('#mod-list li').forEach(li => {
+            const checkbox = li.querySelector('input[type="checkbox"]');
+            if (checkbox.checked) {
+                const modName = li.dataset.modName;
+                const mod = allMods.find(m => m.name === modName);
+                if (mod) {
+                    activeMods.push({ name: mod.name, version: mod.version });
+                }
+            }
+        });
+
+        if (activeMods.length === 0) {
+            alert('No active mods to share.');
+            return;
+        }
+
+        const result = await window.electronAPI.generateShareString(activeMods);
+        if (result.success) {
+            elements.exportTextarea.value = result.shareString;
+            elements.exportModal.style.display = 'flex';
+        }
+    });
+
+    elements.importFromTextBtn.addEventListener('click', () => {
+        elements.importTextarea.value = '';
+        elements.importModal.style.display = 'flex';
+    });
+
+    // Modal close buttons
+    elements.closeExportModalBtn.addEventListener('click', () => {
+        elements.exportModal.style.display = 'none';
+    });
+    elements.closeImportModalBtn.addEventListener('click', () => {
+        elements.importModal.style.display = 'none';
+    });
+
+    // Modal actions
+    elements.copyConfigBtn.addEventListener('click', () => {
+        window.electronAPI.copyToClipboard(elements.exportTextarea.value);
+        alert('Copied to clipboard!');
+    });
+
+    elements.importConfigBtn.addEventListener('click', async () => {
+        const shareString = elements.importTextarea.value;
+        if (!shareString) return;
+
+        const result = await window.electronAPI.importShareString(shareString);
+        
+        if (result.success) {
+            const playlistName = `Imported-${new Date().toISOString().slice(0,10)}`;
+            const activeStates = {};
+            const requiredMods = result.config.mods.map(m => m.name);
+            
+            document.querySelectorAll('#mod-list li').forEach(li => {
+                const modName = li.dataset.modName;
+                activeStates[modName] = requiredMods.includes(modName);
+            });
+            
+            const saveResult = await window.electronAPI.savePlaylist(playlistName, activeStates);
+            if (saveResult.success) {
+                const { store } = await window.electronAPI.getInitialData();
+                refreshPlaylistUI(store.playlists, playlistName);
+                
+                // Apply states to UI
+                document.querySelectorAll('#mod-list li').forEach(li => {
+                    const modName = li.dataset.modName;
+                    const checkbox = li.querySelector('input[type="checkbox"]');
+                    checkbox.checked = activeStates[modName] || false;
+                });
+
+                updatePendingState(true);
+                alert((translations.IMPORT_SUCCESS_DESC || "Playlist '{playlistName}' has been created...").replace('{playlistName}', playlistName));
+                elements.importModal.style.display = 'none';
+            }
+
+        } else if (result.missing) {
+            let missingModsMessage = `${translations.MISSING_MODS_DESC || 'The following mods are required:'}\n\n`;
+            missingModsMessage += result.mods.join('\n');
+            alert(`${translations.MISSING_MODS_TITLE || 'Missing Mods'}\n\n${missingModsMessage}`);
+        } else {
+            alert(`${translations.ERROR}: ${result.message}`);
+        }
+    });
+
     // --- ローディング表示 ---
     window.electronAPI.onShowLoading((message) => {
         elements.loadingMessage.textContent = message;

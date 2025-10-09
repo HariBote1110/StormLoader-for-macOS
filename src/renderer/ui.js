@@ -1,4 +1,5 @@
 // DOM要素の取得
+// DOM要素の取得
 export const elements = {
     settingsBtn: document.getElementById('settings-btn'),
     addModBtn: document.getElementById('add-mod-btn'),
@@ -18,12 +19,33 @@ export const elements = {
     overwritePlaylistBtn: document.getElementById('overwrite-playlist-btn'),
     applyChangesBtn: document.getElementById('apply-changes-btn'),
     pendingIndicator: document.getElementById('pending-indicator'),
+    shareConfigBtn: document.getElementById('share-config-btn'),
+    importFromTextBtn: document.getElementById('import-from-text-btn'),
+
+    // Modals
+    exportModal: document.getElementById('export-modal'),
+    exportTextarea: document.getElementById('export-textarea'),
+    copyConfigBtn: document.getElementById('copy-config-btn'),
+    closeExportModalBtn: document.getElementById('close-export-modal-btn'),
+    importModal: document.getElementById('import-modal'),
+    importTextarea: document.getElementById('import-textarea'),
+    importConfigBtn: document.getElementById('import-config-btn'),
+    closeImportModalBtn: document.getElementById('close-import-modal-btn'),
 };
 
-export function applyTranslations(translations) {
+// ... (残りのコードは変更なし)
+
+export function applyTranslations(translations, platform) {
     document.querySelectorAll('[data-lang]').forEach(el => {
         const key = el.getAttribute('data-lang');
-        if (translations[key]) el.textContent = translations[key];
+        
+        // OS固有のキーがあるかチェック (例: SET_GAME_DIR_WIN)
+        const platformKey = `${key}_${platform === 'win32' ? 'WIN' : 'MAC'}`;
+        if (translations[platformKey]) {
+            el.textContent = translations[platformKey];
+        } else if (translations[key]) {
+            el.textContent = translations[key];
+        }
     });
     document.querySelectorAll('[data-lang-placeholder]').forEach(el => {
         const key = el.getAttribute('data-lang-placeholder');
@@ -36,7 +58,7 @@ export function applyTranslations(translations) {
             if (translations[key]) el.textContent = translations[key];
         }
     });
-    document.title = translations.APP_TITLE || 'StormLoader for macOS';
+    document.title = translations.APP_TITLE || 'StormForge';
 }
 
 export function addModToList(mod, translations) {
@@ -93,8 +115,8 @@ export function updatePendingState(isPending) {
     elements.applyChangesBtn.style.display = isPending ? 'block' : 'none';
 }
 
-export function initializeUI(translations, store) {
-    applyTranslations(translations);
+export function initializeUI(translations, store, platform) {
+    applyTranslations(translations, platform);
     if (store.romPath) {
         elements.gameDirDisplay.textContent = store.romPath;
         elements.gameDirContainer.classList.add('path-hidden');

@@ -3,9 +3,29 @@ const path = require('path');
 const fs = require('fs-extra');
 const { registerIpcHandlers } = require('./ipcHandlers');
 const { readStore, writeStore } = require('./store');
+const { runMigration } = require('./migration'); // ★★★ 移行スクリプトをインポート
 
 let mainWindow;
 let translations;
+
+// ★★★ 起動時の処理に移行処理を追加
+app.on('ready', async () => {
+  runMigration(); // ★★★ ウィンドウ作成前にデータ移行を実行
+
+  const store = readStore();
+  let currentLang = store.settings?.language || 'ja';
+  translations = await loadTranslations(currentLang);
+
+  if (!store.settings) {
+    store.settings = { language: 'ja' };
+    writeStore(store);
+  }
+
+  registerIpcHandlers(translations);
+  createAppMenu();
+  createWindow();
+});
+
 
 async function loadTranslations(locale) {
   try {
@@ -104,6 +124,7 @@ function createAppMenu() {
     Menu.setApplicationMenu(menu);
 }
 
+
 async function createWindow () {
   mainWindow = new BrowserWindow({
     width: 1000,
@@ -129,21 +150,7 @@ async function createWindow () {
   }
 }
 
-app.whenReady().then(async () => {
-  const store = readStore();
-  let currentLang = store.settings?.language || 'ja';
-  translations = await loadTranslations(currentLang);
-
-  if (!store.settings) {
-    store.settings = { language: 'ja' };
-    writeStore(store);
-  }
-
-  registerIpcHandlers(translations);
-  createAppMenu();
-  createWindow();
-});
-
+// app.whenReady() の呼び出しを1つにまとめる
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();

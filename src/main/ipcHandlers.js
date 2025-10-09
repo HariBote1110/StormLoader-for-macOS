@@ -1,12 +1,15 @@
-const { app, ipcMain, dialog, shell, BrowserWindow } = require('electron');
+const { app, ipcMain, dialog, shell, BrowserWindow, clipboard } = require('electron');
 const path = require('path');
 const fs = require('fs-extra');
 const AdmZip = require('adm-zip');
 const { parseStringPromise } = require('xml2js');
+const pako = require('pako');
 const { readStore, writeStore } = require('./store');
 const { rebuildRomFromActiveMods, backupRom, getRomPath } = require('./modService');
 
 function registerIpcHandlers(translations) {
+  ipcMain.handle('get-app-version', () => app.getVersion());
+
   ipcMain.handle('get-initial-data', async () => {
     const store = readStore();
     if (store.gameDirectory) {
@@ -125,14 +128,12 @@ function registerIpcHandlers(translations) {
     }
   
     try {
-      // Delete mod files from the management directory
       const modPath = modToDelete.path;
       if (await fs.pathExists(modPath)) {
         await fs.remove(modPath);
         console.log(`Deleted mod files from: ${modPath}`);
       }
   
-      // Remove mod info from store.json
       store.mods = store.mods.filter(m => m.name !== modName);
       writeStore(store);
       
@@ -241,6 +242,52 @@ function registerIpcHandlers(translations) {
         return { success: false, message: error.message };
     } finally {
         if(window && !window.isDestroyed()) window.webContents.send('hide-loading');
+    }
+  });
+
+  ipcMain.handle('copy-to-clipboard', (event, text) => {
+    clipboard.writeText(text);
+  });
+
+  ipcMain.handle('generate-share-string', (event, activeMods) => {
+    try {
+      const config = { mods: activeMods };
+      const jsonString = JSON.stringify(config);
+      const compressed = pako.deflate(jsonString);
+      const base64String = Buffer.from(compressed).toString('base64');
+      return { success: true, shareString: `stormforge-playlist:${base64String}` };
+    } catch (error) {
+      console.error('Failed to generate share string:', error);
+      return { success: false, message: error.message };
+    }
+  });
+
+  ipcMain.handle('import-share-string', (event, shareString) => {
+    const prefix = 'stormforge-playlist:';
+    if (!shareString.startsWith(prefix)) {
+      return { success: false, message: 'Invalid configuration format.' };
+    }
+
+    try {
+      const base64String = shareString.substring(prefix.length);
+      const compressed = Buffer.from(base64String, 'base64');
+      const jsonString = pako.inflate(compressed, { to: 'string' });
+      const config = JSON.parse(jsonString);
+      
+      const store = readStore();
+      const installedModNames = (store.mods || []).map(mod => mod.name);
+      const requiredModNames = config.mods.map(mod => mod.name);
+
+      const missingMods = requiredModNames.filter(name => !installedModNames.includes(name));
+
+      if (missingMods.length > 0) {
+        return { success: false, missing: true, mods: missingMods };
+      }
+
+      return { success: true, config: config };
+    } catch (error) {
+      console.error('Failed to import share string:', error);
+      return { success: false, message: 'Failed to parse configuration text. It might be corrupted.' };
     }
   });
 }

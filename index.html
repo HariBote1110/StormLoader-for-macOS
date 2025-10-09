@@ -21,7 +21,10 @@
         </div>
         <div class="main-content">
             <div class="title-bar">
-                <h1 data-lang="APP_TITLE">StormForge</h1>
+                <div class="title-with-version">
+                    <h1 data-lang="APP_TITLE">StormForge</h1>
+                    <span id="version-display"></span>
+                </div>
                 <button id="settings-btn" class="icon-btn"><img src="assets/icons/settings.svg" alt="Settings"></button>
             </div>
             <div class="card">
@@ -39,7 +42,11 @@
             </div>
             <div class="card">
                 <h2 data-lang="CONTROLS">Controls</h2>
-                <button id="add-mod-btn" class="primary" data-lang="ADD_MOD">Add Mod (.slp)</button>
+                <div class="controls-buttons">
+                    <button id="add-mod-btn" class="primary" data-lang="ADD_MOD">Add Mod (.slp)</button>
+                    <button id="share-config-btn" data-lang="SHARE_CONFIG">Share Playlist</button>
+                    <button id="import-from-text-btn" data-lang="IMPORT_FROM_TEXT">Import Playlist from Text</button>
+                </div>
             </div>
             <div class="card">
                 <h2 data-lang="PLAYLISTS">Playlists</h2>
@@ -59,6 +66,31 @@
             </div>
         </div>
     </div>
+
+    <div id="export-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h3 data-lang="SHARE_CONFIG_TITLE">Share Playlist</h3>
+            <p data-lang="SHARE_CONFIG_DESC">Copy and share this playlist text with your friends.</p>
+            <textarea id="export-textarea" readonly></textarea>
+            <div class="modal-actions">
+                <button id="copy-config-btn" class="primary" data-lang="COPY_TO_CLIPBOARD">Copy to Clipboard</button>
+                <button id="close-export-modal-btn" data-lang="CLOSE">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="import-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h3 data-lang="IMPORT_CONFIG_TITLE">Import Playlist</h3>
+            <p data-lang="IMPORT_CONFIG_DESC">Paste the shared playlist text below.</p>
+            <textarea id="import-textarea" data-lang-placeholder="PASTE_CONFIG_HERE" placeholder="Paste playlist text here..."></textarea>
+            <div class="modal-actions">
+                <button id="import-config-btn" class="primary" data-lang="IMPORT">Import</button>
+                <button id="close-import-modal-btn" data-lang="CANCEL">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <script src="./src/renderer/renderer.js" type="module"></script>
 </body>
 </html>

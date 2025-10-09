@@ -1,14 +1,17 @@
 # StormForge
 
-Stormworksユーザー向けのクロスプラットフォームMODマネージャーです。
+![GitHub All Releases](https://img.shields.io/github/downloads/haribote1110/StormForge/total)
+
+macOS & Windowsで動作する、StormworksのクロスプラットフォームMODマネージャーです。
 
 
 ## 概要
 
-StormForgeは、これまでMODの導入が難しかったプレイヤーのために開発された、シンプルで使いやすいMOD管理ツールです。オリジナルのWindows版 `StormLoader` の便利な機能を取り入れつつ、macOSとWindowsの両方で動作するように再設計されました。
+StormForgeは、これまでMODの導入が難しかったプレイヤーのために開発された、シンプルで使いやすいMOD管理ツールです。オリジナルのWindows版 `StormLoader` の便利な機能を取り入れつつ、**macOSとWindowsの両方で動作する**ように再設計されました。
 
 ## 主な機能 ✨
 
+* **クロスプラットフォーム対応**: macOSとWindowsの両方で同じ機能を提供します。
 * **簡単なMOD管理**: `.slp` または `.zip` 形式のMODファイルをファイル選択ダイアログから簡単に追加できます。
 * **安全なMOD適用**: 初回設定時にゲームのオリジナルファイル（`rom`フォルダ）を自動でバックアップ。MODを適用する際は、常にクリーンな状態からインストールを行うため、ファイルが破損する心配がありません。
 * **プレイリスト機能**: MODの有効/無効の組み合わせを「プレイリスト」として名前をつけて保存できます。気分に合わせてMOD構成を瞬時に切り替えることが可能です。

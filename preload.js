@@ -1,6 +1,8 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
+  getPlatform: () => process.platform,
+  getAppVersion: () => ipcRenderer.invoke('get-app-version'),
   getInitialData: () => ipcRenderer.invoke('get-initial-data'),
   switchLanguage: (locale) => ipcRenderer.invoke('switch-language', locale),
   setGameDirectory: () => ipcRenderer.invoke('set-game-directory'),
@@ -14,6 +16,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   overwritePlaylist: (name, activeStates) => ipcRenderer.invoke('overwrite-playlist', name, activeStates),
   setLastSelectedPlaylist: (name) => ipcRenderer.invoke('set-last-selected-playlist', name),
   applyModChanges: (activeStates) => ipcRenderer.invoke('apply-mod-changes', activeStates),
+  generateShareString: (activeMods) => ipcRenderer.invoke('generate-share-string', activeMods),
+  importShareString: (shareString) => ipcRenderer.invoke('import-share-string', shareString),
+  copyToClipboard: (text) => ipcRenderer.invoke('copy-to-clipboard', text),
   onShowLoading: (callback) => ipcRenderer.on('show-loading', (event, message) => callback(message)),
   onHideLoading: (callback) => ipcRenderer.on('hide-loading', () => callback())
 });
