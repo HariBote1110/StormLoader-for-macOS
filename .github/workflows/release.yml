@@ -34,5 +34,6 @@ jobs:
           files: |
             dist/*.dmg
             dist/*.zip
-            dist/latest-mac.yml
+            dist/*-mac.yml
             dist/*.exe
+            dist/*-win.yml
