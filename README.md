@@ -2,12 +2,18 @@
 
 ![GitHub All Releases](https://img.shields.io/github/downloads/haribote1110/StormForge/total)
 
-macOS & Windowsで動作する、StormworksのクロスプラットフォームMODマネージャーです。
+macOS & Windowsで動作する、Stormworksユーザー向けのクロスプラットフォームMODマネージャーです。
 
 
 ## 概要
 
-StormForgeは、これまでMODの導入が難しかったプレイヤーのために開発された、シンプルで使いやすいMOD管理ツールです。オリジナルのWindows版 `StormLoader` の便利な機能を取り入れつつ、**macOSとWindowsの両方で動作する**ように再設計されました。
+StormForgeは、これまでMODの導入が難しかったプレイヤーのために開発された、シンプルで使いやすいMOD管理ツールです。オリジナルのWindows版 `StormLoader` の便利な機能を取り入れつつ、**macOSとWindowsの両方で直感的に動作する**ように再設計されました。
+
+## 免責事項 (Disclaimer)
+
+* 本アプリケーション`StormForge`および開発者は、ゲーム`Stormworks`またはその開発元であるGeometaとは一切関係ありません。
+* MODやMODパッケージで使用されるファイル形式やフォルダ構造について、`StormForge`の動作のために特別に設計されたものを除き、いかなる権利も主張しません。
+* 非公式なソースからダウンロードおよびインストールされたMODの安全性は保証できません。MODの使用は、ご自身の責任において行ってください。
 
 ## 主な機能 ✨
 
