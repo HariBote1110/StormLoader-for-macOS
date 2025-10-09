@@ -45,7 +45,6 @@ jobs:
           files: |
             dist/*.dmg
             dist/*.zip
-            dist/*-mac.yml
 
       - name: Upload Windows Release Assets
         if: runner.os == 'Windows'
@@ -53,4 +52,3 @@ jobs:
         with:
           files: |
             dist/*.exe
-            dist/*-win.yml
