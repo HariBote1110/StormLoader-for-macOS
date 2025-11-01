@@ -2,7 +2,7 @@
 
 ![GitHub All Releases](https://img.shields.io/github/downloads/haribote1110/StormForge/total)
 
-macOS & Windowsで動作する、Stormworksユーザー向けのクロスプラットフォームMODマネージャーです。
+macOS & Windowsで動作する、クロスプラットフォームStormworksMODマネージャーです。
 
 
 ## 概要
