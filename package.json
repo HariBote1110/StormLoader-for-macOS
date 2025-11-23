@@ -1,6 +1,6 @@
 {
   "name": "stormforge",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "A mod manager for Stormworks.",
   "main": "src/main/app.js",
   "author": "haribote1110",
@@ -31,6 +31,7 @@
       "!build/icon.*"
     ],
     "mac": {
+      "identity": null,
       "category": "public.app-category.utilities",
       "target": [
         "dmg",
@@ -38,14 +39,20 @@
       ],
       "icon": "build/icon.png"
     },
-  "win": {
-    "target": {      
-      "target": "nsis",
-      "arch": [      
-        "x64"
-      ]
-    }
-  },
+    "win": {
+      "target": {
+        "target": "nsis",
+        "arch": [
+          "x64"
+        ]
+      }
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
     "dmg": {
       "contents": [
         {

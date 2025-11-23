@@ -3,6 +3,8 @@
   "SETTINGS": "設定",
   "SET_GAME_DIR": "Stormworks.app を選択",
   "SET_GAME_DIR_WIN": "インストールフォルダを選択",
+  "AUTO_DETECT": "自動検出",
+  "LAUNCH_GAME": "ゲームを起動",
   "UPDATE_VANILLA_ROM": "バニラROMバックアップを更新",
   "GAME_ROM_DIR": "ゲームROMディレクトリ:",
   "NOT_SET": "未設定",

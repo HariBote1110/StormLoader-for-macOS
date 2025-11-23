@@ -6,6 +6,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getInitialData: () => ipcRenderer.invoke('get-initial-data'),
   switchLanguage: (locale) => ipcRenderer.invoke('switch-language', locale),
   setGameDirectory: () => ipcRenderer.invoke('set-game-directory'),
+  autoDetectPath: () => ipcRenderer.invoke('auto-detect-path'), // ★ 追加
+  launchGame: () => ipcRenderer.invoke('launch-game'), // ★ 追加
   addMod: () => ipcRenderer.invoke('add-mod'),
   deleteMod: (modName) => ipcRenderer.invoke('delete-mod', modName),
   backupRom: () => ipcRenderer.invoke('backup-rom'),

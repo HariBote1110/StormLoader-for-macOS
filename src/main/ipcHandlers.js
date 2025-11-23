@@ -6,6 +6,7 @@ const { parseStringPromise } = require('xml2js');
 const pako = require('pako');
 const { readStore, writeStore } = require('./store');
 const { rebuildRomFromActiveMods, backupRom, getRomPath } = require('./modService');
+const { detectGamePath } = require('./steamUtils'); // ★ 新規追加
 
 function registerIpcHandlers(translations) {
   ipcMain.handle('get-app-version', () => app.getVersion());
@@ -21,6 +22,42 @@ function registerIpcHandlers(translations) {
   ipcMain.handle('backup-rom', (event) => {
     const window = BrowserWindow.fromWebContents(event.sender);
     return backupRom(window, translations);
+  });
+
+  // ★ ゲーム起動ハンドラを追加
+  ipcMain.handle('launch-game', async () => {
+    try {
+        // Steamプロトコルを使用して起動 (クロスプラットフォームで最も確実)
+        await shell.openExternal('steam://run/573090');
+        return { success: true };
+    } catch (error) {
+        console.error('Failed to launch game:', error);
+        return { success: false, message: error.message };
+    }
+  });
+
+  // ★ 自動検出ハンドラを追加
+  ipcMain.handle('auto-detect-path', async (event) => {
+    const window = BrowserWindow.fromWebContents(event.sender);
+    try {
+        const detectedPath = await detectGamePath();
+        
+        if (detectedPath) {
+            const store = readStore();
+            store.gameDirectory = detectedPath;
+            writeStore(store);
+            
+            const romPath = getRomPath(detectedPath);
+            if (await fs.pathExists(romPath)) {
+                 // 自動でバックアップも試みる
+                 await backupRom(window, translations);
+                 return { success: true, path: detectedPath, romPath: romPath };
+            }
+        }
+        return { success: false, message: 'Could not detect Stormworks installation.' };
+    } catch (error) {
+        return { success: false, message: error.message };
+    }
   });
   
   ipcMain.handle('set-game-directory', async (event) => {

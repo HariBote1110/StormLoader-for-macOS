@@ -31,6 +31,33 @@ export function setupEventListeners(translations) {
         }
     });
 
+    // ★ 自動検出ボタンのリスナー
+    elements.autoDetectBtn.addEventListener('click', async () => {
+        window.electronAPI.onShowLoading(() => {}); // ダミーコールバックでローディング表示をトリガーできればベターだが、直接UI操作でも可
+        elements.loadingOverlay.style.display = 'flex';
+        elements.loadingMessage.textContent = translations.PROCESSING || "Processing...";
+
+        const result = await window.electronAPI.autoDetectPath();
+        
+        elements.loadingOverlay.style.display = 'none';
+
+        if (result.success) {
+            elements.gameDirDisplay.textContent = result.romPath;
+            elements.gameDirContainer.classList.remove('path-hidden');
+            alert(translations.SUCCESS || "Path detected successfully!");
+        } else {
+            alert(`${translations.ERROR}: ${result.message}`);
+        }
+    });
+
+    // ★ ゲーム起動ボタンのリスナー
+    elements.launchGameBtn.addEventListener('click', async () => {
+        const result = await window.electronAPI.launchGame();
+        if (!result.success) {
+            alert(`${translations.ERROR}: ${result.message}`);
+        }
+    });
+
     elements.backupRomBtn.addEventListener('click', () => window.electronAPI.backupRom());
 
     elements.savePlaylistBtn.addEventListener('click', async () => {

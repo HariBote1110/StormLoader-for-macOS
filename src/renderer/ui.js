@@ -1,9 +1,10 @@
 // DOM要素の取得
-// DOM要素の取得
 export const elements = {
     settingsBtn: document.getElementById('settings-btn'),
     addModBtn: document.getElementById('add-mod-btn'),
     setGameDirBtn: document.getElementById('set-game-dir-btn'),
+    autoDetectBtn: document.getElementById('auto-detect-btn'), // ★ 追加
+    launchGameBtn: document.getElementById('launch-game-btn'), // ★ 追加
     backupRomBtn: document.getElementById('backup-rom-btn'),
     gameDirContainer: document.getElementById('game-dir-container'),
     gameDirDisplay: document.getElementById('game-dir-display'),

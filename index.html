@@ -25,11 +25,19 @@
                     <h1 data-lang="APP_TITLE">StormForge</h1>
                     <span id="version-display"></span>
                 </div>
-                <button id="settings-btn" class="icon-btn"><img src="assets/icons/settings.svg" alt="Settings"></button>
+                <div style="display: flex; gap: 10px;">
+                    <button id="launch-game-btn" class="primary" data-lang="LAUNCH_GAME" style="display: flex; align-items: center; gap: 5px;">
+                        <span style="font-size: 16px;">▶</span> <span data-lang="LAUNCH_GAME">Launch Game</span>
+                    </button>
+                    <button id="settings-btn" class="icon-btn"><img src="assets/icons/settings.svg" alt="Settings"></button>
+                </div>
             </div>
             <div class="card">
                 <h2 data-lang="SETTINGS">Settings</h2>
-                <button id="set-game-dir-btn" data-lang="SET_GAME_DIR">Select Stormworks.app</button>
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <button id="set-game-dir-btn" data-lang="SET_GAME_DIR">Select Stormworks.app</button>
+                    <button id="auto-detect-btn" data-lang="AUTO_DETECT">Auto Detect</button>
+                </div>
                 <button id="backup-rom-btn" data-lang="UPDATE_VANILLA_ROM">Update Vanilla ROM Backup</button>
                 <p style="margin-top: 15px;">
                     <span data-lang="GAME_ROM_DIR">Game ROM Directory:</span> 
